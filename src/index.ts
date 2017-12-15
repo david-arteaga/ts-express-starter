@@ -7,6 +7,11 @@ const debug = require('debug')('ts-express:index');
 
 import app from "./App";
 
+import model from './models/model'
+model.init()
+  .then(() => debug("Model initialized"))
+  .catch(e => debug("Model could not be initialized", e))
+
 const port = normalizePort(process.env.PORT || 3000);
 app.set('port', port);
 
