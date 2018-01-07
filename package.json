@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "DEBUG=ts-express:* node dist/index.js",
     "build": "tsc",
-    "init-db": "DEBUG=ts-express:* INIT_DB=true node dist/index.js",
-    "dev": "DEBUG=ts-express:* supervisor ./dist/index.js"
+    "init-db": "DEBUG_KNEX=true DEBUG=ts-express:* INIT_DB=true node dist/index.js",
+    "dev": "DEBUG_KNEX=true DEBUG=ts-express:* supervisor ./dist/index.js"
   },
   "author": "David Arteaga",
   "license": "ISC",

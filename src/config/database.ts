@@ -8,7 +8,7 @@ export const config: Knex.Config = {
     password : 'ts',
     database : 'ts'
   },
-  debug: true,
+  debug: (process.env.DEBUG_KNEX || '').toLowerCase() === 'true',
 }
 
 export default config
