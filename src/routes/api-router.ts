@@ -6,6 +6,7 @@ import { userService } from '../api/user-service';
 import { postService } from '../api/post-service';
 import * as fromPost from '../api/post-service';
 import * as fromUser from '../api/user-service';
+import { catch_async } from './base/util';
 
 const debug = require('debug')('ts-express:ApiRouter')
 
@@ -16,24 +17,16 @@ const debug = require('debug')('ts-express:ApiRouter')
 class ApiRouter extends BaseRouter {
 
   init() {
-    this.router.get('/user', this.getUsers)
-    this.router.get('/post', this.getPosts)
+    this.router.get('/user', catch_async(this.getUsers))
+    this.router.get('/post', catch_async(this.getPosts))
   }
 
   async getUsers(req: Request, res: Response) {
-    const [error, result] = await to(userService.getAllUsersWith(fromUser.Related.posts))
-    if (error) {
-      return res.sendStatus(500)
-    }
-    return res.json(result)
+    res.json(await userService.getAllUsersWith(fromUser.Related.posts))
   }
 
   async getPosts(req: Request, res: Response): Promise<any> {
-    const [error, posts] = await to(postService.getAllPostsWithRelated(fromPost.Related.user))
-    if (error) {
-      return res.sendStatus(500)
-    }
-    res.json(posts)
+    res.json(await postService.getAllPostsWithRelated(fromPost.Related.user))
   }
 
 }

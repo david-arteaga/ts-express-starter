@@ -7,9 +7,10 @@ export class PostService extends BaseService {
   getAllPostsWithRelated = async (...related: Related[]): Promise<any[]> => {
     const [error, result] = await tob(this.model.post.fetchAll({ withRelated: related }))
     if (error) {
-      debug('Could not fetch all posts with related ', related)
+      const message = 'Could not fetch all posts with related'
+      debug(message, related)
       debug(error)
-      throw error
+      throw new Error(message)
     }
     return result.toJSON()
   }

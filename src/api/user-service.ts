@@ -9,8 +9,10 @@ export class UserService extends BaseService {
   async getAllUsersWith(...related: Related[]): Promise<any[]> {
     const [error, result] = await tob(this.model.users.fetchAll({ withRelated: related }))
     if (error) {
-      debug('Could not fetch all users with related', related)
-      throw error
+      const message = 'Could not fetch all users with related'
+      debug(message, related)
+      debug(error)
+      throw new Error(message)
     }
     debug('users are', result.toJSON())
     return result.toJSON()
