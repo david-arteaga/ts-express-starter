@@ -3,6 +3,9 @@ import model from '../models/model';
 import { to } from '../util/await-to';
 import { BaseRouter } from "./base/base-router";
 import { userService } from '../api/user-service';
+import { postService } from '../api/post-service';
+import * as fromPost from '../api/post-service';
+import * as fromUser from '../api/user-service';
 
 const debug = require('debug')('ts-express:ApiRouter')
 
@@ -18,22 +21,19 @@ class ApiRouter extends BaseRouter {
   }
 
   async getUsers(req: Request, res: Response) {
-    try {
-      res.json(await userService.getAllUsersWith())
-    } catch (e) {
-      debug('Could not get users', e)
-      res.sendStatus(500)
-    }
-  }
-
-  async getPosts(req: Request, res: Response) {
-    // should use api, NOT MODEL
-    const [error, result] = await to(model.post.fetchAll({withRelated: ['user']}))
+    const [error, result] = await to(userService.getAllUsersWith(fromUser.Related.posts))
     if (error) {
-      debug(error)
       return res.sendStatus(500)
     }
-    return res.json(result.toJSON())
+    return res.json(result)
+  }
+
+  async getPosts(req: Request, res: Response): Promise<any> {
+    const [error, posts] = await to(postService.getAllPostsWithRelated(fromPost.Related.user))
+    if (error) {
+      return res.sendStatus(500)
+    }
+    res.json(posts)
   }
 
 }

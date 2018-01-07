@@ -6,7 +6,7 @@
  * @return { Promise }
  */
 
-import * as Promise from 'bluebird'
+import * as BluebirdPromise from 'bluebird'
 
 export function to<T, U = any>(
   promise: Promise<T>,
@@ -23,4 +23,17 @@ export function to<T, U = any>(
     })
 }
 
-export default to
+export function tob<T, U = any>(
+  promise: BluebirdPromise<T>,
+  errorExt?: object
+): BluebirdPromise<[U | null, T]> {
+  return promise
+    .then<[null, T]>((data: T) => [null, data])
+    .catch<[U, any]>(err => {
+      if (errorExt) {
+        Object.assign(err, errorExt)
+      }
+
+      return [err, null]
+    })
+}
