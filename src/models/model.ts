@@ -21,8 +21,8 @@ export class Model {
   /**
    * Configure the entities in this model
    */
-  users = new Users()
-  post = new Post()
+  Users = Users
+  Post = Post
 
   /**
    * Run the knex migrations and seeds configured for this model

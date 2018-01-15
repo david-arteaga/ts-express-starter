@@ -7,7 +7,7 @@ const debug = require('debug')('ts-express:UserService')
 
 export class UserService extends BaseService {
   async getAllUsersWith(...related: Related[]): Promise<any[]> {
-    const [error, result] = await tob(this.model.users.fetchAll({ withRelated: related }))
+    const [error, result] = await tob(new this.model.Users().fetchAll({ withRelated: related }))
     if (error) {
       const message = 'Could not fetch all users with related'
       debug(message, related)
